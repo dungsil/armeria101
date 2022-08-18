@@ -1,0 +1,25 @@
+plugins {
+  alias(lib.plugins.kotlin)
+}
+
+group = ""
+version = "0.0.0"
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation(lib.bundles.compile)
+  testImplementation(lib.bundles.test)
+}
+
+compileKotlin {
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+}
+
+test {
+  useJUnitPlatform()
+}

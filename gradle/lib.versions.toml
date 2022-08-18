@@ -1,0 +1,15 @@
+[versions]
+kotlin = "1.7.10"
+kotlin-logging = "2.1.23"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+kotlin-logging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+
+[bundles]
+compile = ["kotlin-stdlib", "kotlin-logging"]
+test = ["kotlin-test"]

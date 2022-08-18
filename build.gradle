@@ -1,17 +1,47 @@
 plugins {
-  alias(lib.plugins.kotlin)
+  id("idea")
+  id("application")
+  id("org.jetbrains.kotlin.jvm") version "1.7.10"
+  id("io.spring.dependency-management") version "1.0.12.RELEASE"
 }
 
-group = ""
+group = "com.github.dungsil"
 version = "0.0.0"
 
 repositories {
   mavenCentral()
 }
 
+dependencyManagement {
+  imports {
+    mavenBom 'io.micrometer:micrometer-bom:1.9.2'
+    mavenBom 'io.netty:netty-bom:4.1.79.Final'
+    mavenBom 'com.linecorp.armeria:armeria-bom:1.18.0'
+    mavenBom 'org.junit:junit-bom:5.8.2'
+  }
+}
+
+
 dependencies {
-  implementation(lib.bundles.compile)
-  testImplementation(lib.bundles.test)
+  implementation 'com.linecorp.armeria:armeria'
+  implementation 'com.linecorp.armeria:armeria-kotlin'
+  implementation 'com.zaxxer:HikariCP:5.0.1'
+  implementation 'com.google.code.findbugs:jsr305:3.0.2'
+  runtimeOnly 'ch.qos.logback:logback-classic:1.2.11'
+  runtimeOnly 'com.h2database:h2:2.1.214'
+
+  testImplementation 'com.linecorp.armeria:armeria-junit5'
+  testImplementation 'net.javacrumbs.json-unit:json-unit-fluent:2.35.0'
+  testImplementation 'org.assertj:assertj-core:3.23.1'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api'
+  testImplementation 'junit:junit:4.13.2'
+  testImplementation 'org.assertj:assertj-core:3.23.1'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api'
+  testImplementation 'org.junit.jupiter:junit-jupiter-params'
+  testRuntimeOnly 'org.junit.platform:junit-platform-commons'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+  testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 }
 
 compileKotlin {
@@ -22,4 +52,22 @@ compileKotlin {
 
 test {
   useJUnitPlatform()
+}
+
+application {
+  mainClass.set("com.github.dungsil.armeria101.MainKt")
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'com.github.dungsil.armeria101.MainKt'
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+  from {
+    configurations.runtimeClasspath.collect {
+      it.isDirectory() ? it : zipTree(it)
+    }
+  }
 }
